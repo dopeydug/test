@@ -1,0 +1,14 @@
+{
+  "name": "Sleep Assessment",
+  "sections": {
+    "sleep-assessment": {
+      "type": "sleep-assessment",
+      "settings": {
+        "klaviyo_client_tracking": true,
+        "submit_endpoint": "",
+        "klaviyo_list_id": ""
+      }
+    }
+  },
+  "order": ["sleep-assessment"]
+}

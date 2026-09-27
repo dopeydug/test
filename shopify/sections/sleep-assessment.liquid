@@ -1,0 +1,94 @@
+{%- comment -%}
+  Muscle Mat — Complimentary Personal Sleep Assessment (theme section)
+
+  Installation
+  1. Copy the built bundle to the theme:
+       dist/sleep-assessment.min.js   →  assets/sleep-assessment.min.js
+       assets/css/sleep-assessment.css →  assets/sleep-assessment.css
+  2. Copy this file to sections/ and templates/page.sleep-assessment.json to templates/.
+  3. Create a page (e.g. /pages/sleep-assessment) and assign the "sleep-assessment" template.
+
+  The template suffix is listed alongside 'editorial' / 'advertorial' in
+  layout/theme.liquid so the store header, announcement bar and footer are not
+  rendered — the assessment provides its own simplified header. Add:
+       if template.suffix == 'editorial' or template.suffix == 'advertorial' or template.suffix == 'sleep-assessment'
+  to the `full_load` assignment in layout/theme.liquid.
+
+  Live product data is injected below from the store, so prices, images and
+  URLs never go stale. No private keys are used anywhere in this section.
+{%- endcomment -%}
+
+{%- liquid
+  assign logo = section.settings.logo | default: settings.logo
+  assign hero = section.settings.hero_image
+  assign product_handles = 'luxury-mattress-topper,pillow,duvet,casa-cotton-fitted-sheet,musclemat,relax-mat,designer-blanket' | split: ','
+  assign product_ids = 'topper,pillow,duvet,sheets,acupressure_mat,relax_mat,alpine_blanket' | split: ','
+-%}
+
+<link rel="stylesheet" href="{{ 'sleep-assessment.css' | asset_url }}">
+
+<script>
+  window.MM_SLEEP_CONFIG = {
+    brand: {
+      name: {{ shop.name | json }},
+      homeUrl: {{ routes.root_url | prepend: shop.url | json }},
+      {%- if logo != blank %}
+      logoUrl: {{ logo | image_url: width: 400 | json }},
+      logoAlt: {{ shop.name | json }},
+      {%- endif %}
+      privacyUrl: {{ shop.privacy_policy.url | default: '/policies/privacy-policy' | prepend: shop.url | json }},
+      contactEmail: {{ shop.email | json }},
+      {%- if hero != blank %}
+      heroImageUrl: {{ hero | image_url: width: 1400 | json }},
+      heroImageAlt: {{ hero.alt | default: 'Muscle Mat' | json }},
+      {%- endif %}
+    },
+    endpoints: {
+      {%- comment -%} TODO: secure server-side endpoint (app proxy or serverless) holding the private Klaviyo key {%- endcomment -%}
+      submit: {{ section.settings.submit_endpoint | default: nil | json }}
+    },
+    klaviyo: {
+      clientTracking: {{ section.settings.klaviyo_client_tracking | json }},
+      listId: {{ section.settings.klaviyo_list_id | default: nil | json }}
+    },
+    analytics: { dataLayer: true, debug: false },
+    products: {
+      {%- for handle in product_handles -%}
+        {%- assign product = all_products[handle] -%}
+        {%- assign pid = product_ids[forloop.index0] -%}
+        {%- if product and product != empty -%}
+          {{ pid | json }}: {
+            title: {{ product.title | json }},
+            url: {{ product.url | prepend: shop.url | json }},
+            image: {{ product.featured_image | image_url: width: 900 | json }},
+            priceFrom: {{ product.price_min | divided_by: 100.0 | json }},
+            currency: {{ cart.currency.iso_code | json }},
+            available: {{ product.available | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endif -%}
+      {%- endfor -%}
+    }
+  };
+</script>
+
+<div id="mm-sleep-assessment" class="mm-sa" data-section-id="{{ section.id }}"></div>
+
+<script src="{{ 'sleep-assessment.min.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Sleep Assessment",
+  "tag": "section",
+  "class": "mm-sa-section-wrapper",
+  "settings": [
+    { "type": "header", "content": "Branding" },
+    { "type": "image_picker", "id": "logo", "label": "Logo (black writing, transparent)", "info": "Defaults to the theme header logo." },
+    { "type": "image_picker", "id": "hero_image", "label": "Editorial hero image", "info": "Brand lifestyle photography, portrait works best." },
+    { "type": "header", "content": "Integrations" },
+    { "type": "text", "id": "submit_endpoint", "label": "Secure submit endpoint", "info": "Server-side URL that receives the assessment and syncs to Klaviyo with a private key, e.g. /apps/sleep-assessment/submit. Leave blank to disable server sync." },
+    { "type": "checkbox", "id": "klaviyo_client_tracking", "label": "Klaviyo onsite tracking", "default": true, "info": "Uses the Klaviyo app embed already installed on the theme (public key only)." },
+    { "type": "text", "id": "klaviyo_list_id", "label": "Klaviyo list ID for opted-in subscribers", "info": "Only subscribed when the customer ticks the optional marketing box; handled server-side." }
+  ],
+  "presets": [{ "name": "Sleep Assessment" }]
+}
+{% endschema %}

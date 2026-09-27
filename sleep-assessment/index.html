@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Complimentary Personal Sleep Assessment – Muscle Mat</title>
+  <meta name="description" content="Complete Muscle Mat’s 2-minute sleep assessment and receive a personalised breakdown of your sleep routine, environment and comfort, plus practical recommendations you can start tonight.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#FFFAF5">
+  <link rel="icon" href="data:,">
+  <meta property="og:title" content="Understand your sleep. Improve what matters.">
+  <meta property="og:description" content="A complimentary 2-minute sleep assessment from Muscle Mat with a personalised sleep score, tonight’s plan and a 7-day reset.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts: the Muscle Mat theme already loads Assistant + Mulish from Google Fonts (see layout/theme.liquid). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/sleep-assessment.css">
+
+  <!--
+    Optional host configuration. Everything is optional; see assets/js/data/config.js.
+    In the Shopify theme this object is written by sections/sleep-assessment.liquid.
+  -->
+  <script>
+    window.MM_SLEEP_CONFIG = {
+      endpoints: {
+        // TODO: set to your secure server-side endpoint, e.g. '/apps/sleep-assessment/submit'
+        submit: null
+      },
+      analytics: { debug: false }
+    };
+  </script>
+  <style>
+    /* Page-level reset for the standalone preview only (the theme has its own). */
+    html, body { margin: 0; padding: 0; background: #FFFAF5; }
+  </style>
+</head>
+<body>
+  <div id="mm-sleep-assessment" class="mm-sa" aria-live="polite">
+    <noscript>
+      <div style="max-width:640px;margin:80px auto;padding:0 20px;font-family:Mulish,Arial,sans-serif;color:#333">
+        <h1 style="font-family:Assistant,Arial,sans-serif;font-weight:300;font-size:40px;line-height:1.1">Understand your sleep. Improve what matters.</h1>
+        <p>The sleep assessment needs JavaScript to run. Please enable it, or email <a href="mailto:info@musclemat.com.au">info@musclemat.com.au</a> and we will help.</p>
+      </div>
+    </noscript>
+  </div>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
